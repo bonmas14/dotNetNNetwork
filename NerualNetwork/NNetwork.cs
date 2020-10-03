@@ -149,80 +149,32 @@ namespace NerualNetwork
                 // пропускаем первый слой
                 if (i == 0) continue;
 
-                List<Task> tasks = new List<Task>();
-
                 // обновляем каждый нейрон
                 for (int j = 0; j < layers[i].Count; j++)
                 {
-                    List<Neuron> neurons = new List<Neuron>();
-
-                    foreach (var item in layers[i - 1])
-                    {
-                        neurons.Add(item);
-                    }
-
-                    Task task = new Task(() => layers[i][j].UpdateData(neurons));
-
-                    tasks.Add(task);
+                    layers[i][j].UpdateData(layers[i - 1]);
                 }
-                // start tasks
-                foreach (Task task in tasks)
-                {
-                    task.Start();
-                }
-
-                Task.WaitAll(tasks.ToArray());
             }
         }
 
         public void Learn(double[] LearnSet)
         {
-            List<Task> tasks;
-
             // поиск ошибки методом обратного распространения ошибки
             for (int i = layers.Length - 1; i >= 0; i--)
             {
                 if (i == layers.Length - 1)
                 {
-                    tasks = new List<Task>();
-                    
                     for (int j = 0; j < layers[i].Count; j++)
                     {
-                        Task task = new Task(() => layers[i][j].GetError(LearnSet[j]));
-                        tasks.Add(task);
+                        layers[i][j].GetError(LearnSet[j]);
                     }
-                    // start tasks
-                    foreach (Task task in tasks)
-                    {
-                        task.Start();
-                    }
-
-                    Task.WaitAll(tasks.ToArray());
                 }
                 else
                 {
-                    tasks = new List<Task>();
-
                     for (int j = 0; j < layers[i].Count; j++)
                     {
-                        List<Neuron> neurons = new List<Neuron>();
-
-                        foreach (var item in layers[i + 1])
-                        {
-                            neurons.Add(item);
-                        }
-
-                        Task task = new Task(() => layers[i][j].GetError(j, neurons));
-                        
-                        tasks.Add(task);
+                        layers[i][j].GetError(j, layers[i + 1]);
                     }
-                    // start tasks
-                    foreach (Task task in tasks)
-                    {
-                        task.Start();
-                    }
-
-                    Task.WaitAll(tasks.ToArray());
                 }
             }
 
@@ -231,49 +183,37 @@ namespace NerualNetwork
             {
                 if (i == 0)
                 {
-                    tasks = new List<Task>();
-
                     for (int j = 0; j < layers[i].Count; j++)
                     {
-                        Task task = new Task(() => layers[i][j].CorrectWeigts(null, learnSpeed));
-                        tasks.Add(task);
+                        layers[i][j].CorrectWeigts(null, learnSpeed);
                     }
-
-                    // start tasks
-                    foreach (Task task in tasks)
-                    {
-                        task.Start();
-                    }
-
-                    Task.WaitAll(tasks.ToArray());
                 }
                 else
                 {
-                    tasks = new List<Task>();
-
                     for (int j = 0; j < layers[i].Count; j++)
                     {
-                        List<Neuron> neurons = new List<Neuron>();
-
-                        foreach (var item in layers[i - 1])
-                        {
-                            neurons.Add(item);
-                        }
-
-                        Task task = new Task(() => layers[i][j].CorrectWeigts(neurons, learnSpeed));
-                        tasks.Add(task);
+                        layers[i][j].CorrectWeigts(layers[i - 1], learnSpeed);
                     }
-
-                    // start tasks
-                    foreach (Task task in tasks)
-                    {
-                        task.Start();
-                    }
-
-                    Task.WaitAll(tasks.ToArray());
                 }
             }
         }
         
+        public double[] GetOutput()
+        {
+            // берём последний слой
+            int lastLayer = layers.Length - 1;
+
+            // создаём массив размером с этот слой
+            double[] output = new double[layers[lastLayer].Count];
+
+            // читаем выходные значения каждого нейрона
+            for (int i = 0; i < layers[lastLayer].Count; i++)
+            {
+                output[i] = layers[lastLayer][i].Output;
+            }
+            // возвращаем
+            return output;
+        }
+
     }
 }

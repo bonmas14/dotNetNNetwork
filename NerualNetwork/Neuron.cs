@@ -91,19 +91,20 @@ namespace NerualNetwork
             {
                 return Output;
             }
-
-            return double.NaN;
+            return double.PositiveInfinity;
         }
 
         public void GetError(int neuronIndex, List<Neuron> nextNeurons)
         {
             if (NeruonType == NeuronType.Hidden)
             {
+                error = 0;
+
                 for (int i = 0; i < nextNeurons.Count; i++)
                 {
                     if (nextNeurons[i].NeruonType == NeuronType.Bias)
                         continue;
-                    error += nextNeurons[i].weights[neuronIndex] * nextNeurons[i].error;
+                    error += nextNeurons[i].weights[neuronIndex] * nextNeurons[i].error;  
                 }
 
             }
@@ -113,6 +114,8 @@ namespace NerualNetwork
         {
             if (NeruonType == NeuronType.Output)
             {
+                error = 0;
+
                 error = needOutput - Output;
             }
         }
