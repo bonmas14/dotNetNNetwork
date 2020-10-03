@@ -119,7 +119,7 @@ namespace NerualNetwork
 
         public void CorrectWeigts(List<Neuron> prewNeurons, double learnSpeed)
         {
-            if (NeruonType == NeuronType.Hidden || NeruonType == NeuronType.Hidden)
+            if (NeruonType == NeuronType.Output || NeruonType == NeuronType.Hidden)
             {
                 double deltaError = error * function.DeltaFunc(Output);
 
