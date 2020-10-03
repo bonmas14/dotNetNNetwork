@@ -7,7 +7,7 @@ namespace NerualNetwork
         public double ActivationFunc(double x)
         {
             return 1 / (1 + Math.Pow(Math.E, -x));
-        }
+        } 
 
         public double DeltaFunc(double data)
         {
