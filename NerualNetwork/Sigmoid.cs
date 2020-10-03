@@ -9,9 +9,9 @@ namespace NerualNetwork
             return 1 / 1 - Math.Exp(x);
         }
 
-        public double DeltaFunc(double x)
+        public double DeltaFunc(double data)
         {
-            return ActivationFunc(x) * (1 - ActivationFunc(x));
+            return data * (1 - data);
         }
     }
 }

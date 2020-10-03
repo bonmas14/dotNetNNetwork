@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NerualNetwork
 {
-    enum NeruonType
+    enum NeuronType
     {
         Input,
         Output,
@@ -18,36 +18,26 @@ namespace NerualNetwork
     class Neuron
     {
         // внешние данные
-        public double Output 
-        {
-            get 
-            {
-                return output;
-            }
-        }
+        public double Output { get; private set; }
 
-        public NeruonType NeruonType { get { return type; } }
-        
-        // Внутренние переменные
-        NeruonType type;
+        public NeuronType NeruonType { get; }
 
-        double output;
         double error;
 
         IFunction function;
         
         double[] weights;
 
-        public Neuron(IFunction function, NeruonType type, int prewLayerNeruonCount)
+        public Neuron(IFunction function, NeuronType type, int prewLayerNeruonCount)
         {
             this.function = function;
-            this.type     = type;
+            NeruonType     = type;
 
-            if (type == NeruonType.Bias)
+            if (type == NeuronType.Bias)
             {
-                output = 1;
+                Output = 1;
             }
-            else if (type == NeruonType.Hidden || type == NeruonType.Output)
+            else if (type == NeuronType.Hidden || type == NeuronType.Output)
             {
                 if (prewLayerNeruonCount == 0)
                 {
@@ -67,56 +57,77 @@ namespace NerualNetwork
 
         public void LoadData(double data, bool sendToFunc)
         {
-            if (type == NeruonType.Input)
+            if (NeruonType == NeuronType.Input)
             {
                 if (sendToFunc)
                 {
-                    output = function.ActivationFunc(data);
+                    Output = function.ActivationFunc(data);
                 }
                 else
                 {
-                    output = data;
+                    Output = data;
                 }
             }
         }
 
-        public void UpdateData(List<Neuron> neurons)
+        public void UpdateData(List<Neuron> prewNeurons)
         {
-            if (type == NeruonType.Hidden || type == NeruonType.Output)
+            if (NeruonType == NeuronType.Hidden || NeruonType == NeuronType.Output)
             {
                 double data = 0;
 
                 for (int i = 0; i < weights.Length; i++)
                 {
-                    data += neurons[i].Output * weights[i];
+                    data += prewNeurons[i].Output * weights[i];
                 }
 
-                output = function.ActivationFunc(data);
+                Output = function.ActivationFunc(data);
             }
         }
 
         public double GetData()
         {
-            if (type == NeruonType.Output)
+            if (NeruonType == NeuronType.Output)
             {
-                return output;
+                return Output;
             }
 
             return double.NaN;
         }
 
-        public void GetError()
+        public void GetError(int neuronIndex, List<Neuron> nextNeurons)
         {
-            if (type == NeruonType.Hidden)
+            if (NeruonType == NeuronType.Hidden)
             {
-                
+                for (int i = 0; i < nextNeurons.Count; i++)
+                {
+                    if (nextNeurons[i].NeruonType == NeuronType.Bias)
+                        continue;
+                    error += nextNeurons[i].weights[neuronIndex] * nextNeurons[i].error;
+                }
+
             }
         }
+        
         public void GetError(double needOutput)
         {
-            if (type == NeruonType.Output)
+            if (NeruonType == NeuronType.Output)
             {
-                error =
+                error = needOutput - Output;
+            }
+        }
+
+        public void CorrectWeigts(List<Neuron> prewNeurons, double learnSpeed)
+        {
+            if (NeruonType == NeuronType.Hidden || NeruonType == NeuronType.Hidden)
+            {
+                double deltaError = error * function.DeltaFunc(Output);
+
+                for (int i = 0; i < prewNeurons.Count; i++)
+                {
+                    double correct = learnSpeed * deltaError * prewNeurons[i].Output;
+                    weights[i] += correct;
+                }
             }
         }
     }
