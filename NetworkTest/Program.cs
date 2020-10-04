@@ -15,7 +15,7 @@ namespace NetworkTest
 
             pack[0] = new double[] { 0.5, 0 };
             pack[1] = new double[] { 0, 0.7 };
-            pack[2] = new double[] { 0, 0 };
+            pack[2] = new double[] { 0, 0   };
             pack[3] = new double[] { 0.2, 0 };
             pack[4] = new double[] { 1, 0.4 };
             
