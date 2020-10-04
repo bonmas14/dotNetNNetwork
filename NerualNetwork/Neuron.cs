@@ -102,7 +102,6 @@ namespace NerualNetwork
                         continue;
                     error += nextNeurons[i].weights[neuronIndex] * nextNeurons[i].error;  
                 }
-
             }
         }
         

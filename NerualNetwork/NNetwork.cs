@@ -4,32 +4,27 @@ namespace NerualNetwork
 {
     public class NNetwork
     {
-        // public
-        public double learnSpeed = 0.1;
+        /// <summary>
+        /// Скорость обучения
+        /// </summary>
+        public double LearnSpeed { get; set; } = 0.1;
 
-        //---/ debug
-        public int LayersCount 
-        {
-            get
-            {
-                return layersCount;
-            }
-        }
 
-        // private
-
+        // network maket
         NeuronType[][] maket;
-
-        //---/ debug
-        int layersCount;
+ 
+        // neurons
         private List<Neuron>[] layers;
 
         // methods
 
+        /// <summary>
+        /// Констуктор сети
+        /// </summary>
+        /// <param name="function"> Используемая функция активации, стандартная - Sigmoid</param>
+        /// <param name="network"> Макет сети, количество слоёв это длина массива и тд</param>
         public NNetwork(IFunction function, int[] network)
         {
-            layersCount = network.Length;
-
             CreateMaket(network);
 
             CreateNetwork(function);
@@ -57,7 +52,7 @@ namespace NerualNetwork
                     // инициализация нейронов
                     for (int j = 0; j < maket[i].Length; j++)
                     {
-                        // если последний то это нейрон смещения
+                        // если последний, то это нейрон смещения
                         // иначе это вход
                         if (j == maket[i].Length - 1)
                         {
@@ -85,7 +80,7 @@ namespace NerualNetwork
                 // все остальные слои
                 for (int j = 0; j < maket[i].Length; j++)
                 {
-                    // если последний то это нейрон смещения
+                    // если последний, то это нейрон смещения
                     // иначе это внутренний нейрон
                     if (j == maket[i].Length - 1)
                     {
@@ -122,6 +117,11 @@ namespace NerualNetwork
             }
         }
 
+        /// <summary>
+        /// Отправка данных в сеть
+        /// </summary>
+        /// <param name="inputData"> Данные в сеть </param>
+        /// <param name="activate"> Проводить данные через функцию активации </param>
         public void SendData(double[] inputData, bool activate)
         {
             // берём первый слой
@@ -136,7 +136,10 @@ namespace NerualNetwork
                 layers[inputLayer][i].LoadData(inputData[i], activate);
             }
         }
-
+        
+        /// <summary>
+        /// Обновление всех весов в сети
+        /// </summary>
         public void UpdateData()
         {
             for (int i = 0; i < layers.Length; i++)
@@ -152,6 +155,10 @@ namespace NerualNetwork
             }
         }
 
+        /// <summary>
+        /// Обучение сети
+        /// </summary>
+        /// <param name="LearnSet"> Данные для обучения </param>
         public void Learn(double[] LearnSet)
         {
             // поиск ошибки методом обратного распространения ошибки
@@ -176,23 +183,20 @@ namespace NerualNetwork
             // корректировка весов согласно ошибкам
             for (int i = layers.Length - 1; i >= 0; i--)
             {
-                if (i == 0)
+                if (i != 0)
                 {
                     for (int j = 0; j < layers[i].Count; j++)
                     {
-                        layers[i][j].CorrectWeigts(null, learnSpeed);
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < layers[i].Count; j++)
-                    {
-                        layers[i][j].CorrectWeigts(layers[i - 1], learnSpeed);
+                        layers[i][j].CorrectWeigts(layers[i - 1], LearnSpeed);
                     }
                 }
             }
         }
         
+        /// <summary>
+        /// Возврат данных с сети
+        /// </summary>
+        /// <returns> Данные из сети </returns>
         public double[] GetOutput()
         {
             // берём последний слой
