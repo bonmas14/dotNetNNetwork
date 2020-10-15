@@ -1,4 +1,4 @@
-﻿
+﻿// Copyright (c) 2020 BonMAS14
 namespace NerualNetwork
 {
     public interface IFunction

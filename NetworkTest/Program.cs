@@ -1,6 +1,6 @@
 ﻿using System;
 using NerualNetwork;
-
+// Copyright (c) 2020 BonMAS14
 namespace NetworkTest
 {
     class Program
