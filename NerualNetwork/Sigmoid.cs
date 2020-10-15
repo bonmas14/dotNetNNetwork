@@ -1,5 +1,5 @@
 ﻿using System;
-
+// Copyright (c) 2020 BonMAS14
 namespace NerualNetwork
 {
     public class Sigmoid : IFunction
