@@ -1,4 +1,10 @@
 # dotNetNNetwork
+[![licence badge]][licence]
+
+[licence badge]:https://img.shields.io/github/license/bonMAS14/dotNetNNetwork
+
+[licence]:https://github.com/bonmas14/dotNetNNetwork/blob/master/LICENSE
+
 
 Эта библиотека нейронной сети.
 Чтобы создать нейросеть нужно:
