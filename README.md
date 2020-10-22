@@ -5,9 +5,9 @@
 [![issues badge]][issues]
 
 [licence badge]:https://img.shields.io/github/license/bonMAS14/dotNetNNetwork
-[stars badge]:https://img.shields.io/github/stars/bonMAS14/Markdown.svg
-[forks badge]:https://img.shields.io/github/forks/bonMAS14/Markdown.svg
-[issues badge]:https://img.shields.io/github/issues/bonMAS14/Markdown.svg
+[stars badge]:https://img.shields.io/github/stars/bonMAS14/dotNetNNetwork
+[forks badge]:https://img.shields.io/github/forks/bonMAS14/dotNetNNetwork
+[issues badge]:https://img.shields.io/github/issues/bonMAS14/dotNetNNetwork
 
 [licence]:https://github.com/bonmas14/dotNetNNetwork/blob/master/LICENSE
 [stars]:https://github.com/bonMAS14/dotNetNNetwork/stargazers
