@@ -9,10 +9,9 @@ namespace NerualNetwork
         /// </summary>
         public double LearnSpeed { get; set; } = 0.1;
 
-
         // network maket
         NeuronType[][] maket;
- 
+
         // neurons
         private List<Neuron>[] layers;
 
@@ -180,6 +179,76 @@ namespace NerualNetwork
                 }
             }
 
+            CorrectWeights();
+        }
+
+        /// <summary>
+        /// Метод для обновления второй сети в GAN, не используется пользователем
+        /// </summary>
+        /// <param name="prewNNet">Массив ошибок первого слоя первой сети</param>
+        public void GanUpdateErrorSecound(double[] prewNNet)
+        {
+            // поиск ошибки методом обратного распространения ошибки
+            for (int i = layers.Length - 1; i >= 0; i--)
+            {
+                if (i == layers.Length - 1)
+                {
+                    for (int j = 0; j < layers[i].Count; j++)
+                    {
+                        layers[i][j].SetError(prewNNet[j]);
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < layers[i].Count; j++)
+                    {
+                        layers[i][j].GetError(j, layers[i + 1]);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Метод для обновления первой сети в GAN, не используется пользователем
+        /// </summary>
+        /// <param name="NeedOut"> Данные для обучения </param>
+        /// <returns>Массив ошибок для второй сети</returns>
+        public double[] GanUpdateErrorFirst(double[] NeedOut)
+        {
+            double[] output = new double[layers[0].Count];
+
+            // поиск ошибки методом обратного распространения ошибки
+            for (int i = layers.Length - 1; i >= 0; i--)
+            {
+                if (i == layers.Length - 1)
+                {
+                    for (int j = 0; j < layers[i].Count; j++)
+                    {
+                        layers[i][j].GetError(NeedOut[j]);
+
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < layers[i].Count; j++)
+                    {
+                        layers[i][j].GetError(j, layers[i + 1]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < layers[0].Count; i++)
+            {
+                output[i] = layers[0][i].Error;
+            }
+
+            return output;
+        }
+
+        /// <summary>
+        /// Корректировка ошибок, не используется пользователем
+        /// </summary>
+        public void CorrectWeights()
+        {
             // корректировка весов согласно ошибкам
             for (int i = layers.Length - 1; i >= 0; i--)
             {
@@ -192,7 +261,7 @@ namespace NerualNetwork
                 }
             }
         }
-        
+
         /// <summary>
         /// Возврат данных с сети
         /// </summary>

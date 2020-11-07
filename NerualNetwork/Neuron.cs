@@ -17,8 +17,7 @@ namespace NerualNetwork
         public double Output { get; private set; }
 
         public NeuronType NeruonType { get; }
-
-        double error;
+        public double Error { get; private set; }
 
         IFunction function;
         
@@ -94,13 +93,13 @@ namespace NerualNetwork
         {
             if (NeruonType == NeuronType.Hidden)
             {
-                error = 0;
+                Error = 0;
 
                 for (int i = 0; i < nextNeurons.Count; i++)
                 {
                     if (nextNeurons[i].NeruonType == NeuronType.Bias)
                         continue;
-                    error += nextNeurons[i].weights[neuronIndex] * nextNeurons[i].error;  
+                    Error += nextNeurons[i].weights[neuronIndex] * nextNeurons[i].Error;  
                 }
             }
         }
@@ -109,9 +108,17 @@ namespace NerualNetwork
         {
             if (NeruonType == NeuronType.Output)
             {
-                error = 0;
+                Error = 0;
 
-                error = needOutput - Output;
+                Error = needOutput - Output;
+            }
+        }
+
+        public void SetError(double error)
+        {
+            if (NeruonType == NeuronType.Output)
+            {
+                this.Error = error;
             }
         }
 
@@ -119,7 +126,7 @@ namespace NerualNetwork
         {
             if (NeruonType == NeuronType.Output || NeruonType == NeuronType.Hidden)
             {
-                double deltaError = error * function.DeltaFunc(Output);
+                double deltaError = Error * function.DeltaFunc(Output);
 
                 for (int i = 0; i < prewNeurons.Count; i++)
                 {

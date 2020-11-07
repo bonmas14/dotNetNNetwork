@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GANNetwork.cs" />
     <Compile Include="IFunction.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="NNetwork.cs" />
