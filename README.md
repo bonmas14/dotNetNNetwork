@@ -1,4 +1,18 @@
 # dotNetNNetwork
+[![licence badge]][licence]
+[![stars badge]][stars]
+[![forks badge]][forks]
+[![issues badge]][issues]
+
+[licence badge]:https://img.shields.io/github/license/bonMAS14/dotNetNNetwork
+[stars badge]:https://img.shields.io/github/stars/bonMAS14/dotNetNNetwork
+[forks badge]:https://img.shields.io/github/forks/bonMAS14/dotNetNNetwork
+[issues badge]:https://img.shields.io/github/issues/bonMAS14/dotNetNNetwork
+
+[licence]:https://github.com/bonmas14/dotNetNNetwork/blob/master/LICENSE
+[stars]:https://github.com/bonMAS14/dotNetNNetwork/stargazers
+[forks]:https://github.com/bonMAS14/dotNetNNetwork/network
+[issues]:https://github.com/bonmas14/dotNetNNetwork/issues
 
 Эта библиотека нейронной сети.
 Чтобы создать нейросеть нужно:
