@@ -40,6 +40,12 @@ namespace NerualNetwork
             secoundNet = new NNetwork(function, maket2);
         }
 
+        //public GANNetwork(NNetwork first, NNetwork secound)
+        //{ 
+        //    firstNet = first;
+        //    secoundNet = secound;
+        //}
+
         public void SetData(double[] data)
         {
             firstNet.SendData(data, true);
@@ -56,12 +62,20 @@ namespace NerualNetwork
             secoundNet.UpdateData();
         }
 
-        public void Learn(double[] needOutput)
+        public void LearnAll(double[] needOutput)
         {
             var errors = secoundNet.GanUpdateErrorFirst(needOutput);
             firstNet.GanUpdateErrorSecound(errors);
 
             secoundNet.CorrectWeights();
+            firstNet.CorrectWeights();
+        }
+
+        public void LearnGenerator(double[] needOutput)
+        {
+            var errors = secoundNet.GanUpdateErrorFirst(needOutput);
+            firstNet.GanUpdateErrorSecound(errors);
+
             firstNet.CorrectWeights();
         }
 
