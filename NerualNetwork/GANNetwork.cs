@@ -27,7 +27,6 @@ namespace NerualNetwork
 
         public GANNetwork(IFunction function, double learnSpeed, int[] maket1, int[] maket2)
         {
-            LearnSpeed = learnSpeed;
 
             if (maket1[maket1.Length - 1] != maket2[0])
             {
@@ -38,6 +37,8 @@ namespace NerualNetwork
 
             firstNet   = new NNetwork(function, maket1);
             secoundNet = new NNetwork(function, maket2);
+            
+            LearnSpeed = learnSpeed;
         }
 
         //public GANNetwork(NNetwork first, NNetwork secound)
