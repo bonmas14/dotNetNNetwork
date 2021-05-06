@@ -13,7 +13,7 @@
 [stars]:https://github.com/bonMAS14/dotNetNNetwork/stargazers
 [forks]:https://github.com/bonMAS14/dotNetNNetwork/network
 [issues]:https://github.com/bonmas14/dotNetNNetwork/issues
-
+ 
 Эта библиотека нейронной сети.
 Чтобы создать нейросеть нужно:
 
