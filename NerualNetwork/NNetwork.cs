@@ -1,5 +1,6 @@
 ﻿using NerualNetwork.Neurons;
 using System.Collections.Generic;
+
 // Copyright (c) 2020 BonMAS14
 namespace NerualNetwork
 {
