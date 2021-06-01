@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NerualNetwork.Neurons;
+using System.Collections.Generic;
 // Copyright (c) 2020 BonMAS14
 namespace NerualNetwork
 {
@@ -15,29 +16,34 @@ namespace NerualNetwork
         /// <param name="network"> Макет сети, количество слоёв это длина массива и тд</param>
         public NNetwork(IFunction function, int[] network)
         {
-            var maket = Maket.CreateMaket(network);
+            var maket = Creator.CreateMaket(network);
 
-            layers = Maket.CreateNetwork(maket, function);
+            layers = Creator.CreateNetwork(maket, function);
         }
 
-        public void SendData(double[] inputData, bool sendToActivationFunc)
+        public void SetData(double[] inputData, bool sendToActivationFunc)
         {
             int inputLayer = 0;
 
-            for (int i = 0; i < layers[inputLayer].Count; i++)
+            for (int i = 0; i < layers[inputLayer].Count - 1; i++)
             {
-                if (layers[inputLayer][i].NeruonType == NeuronType.Bias) continue;
+                if (sendToActivationFunc)
+                {
+                    var function = layers[inputLayer][i].function;
 
-                layers[inputLayer][i].LoadData(inputData[i], sendToActivationFunc);
+                    layers[inputLayer][i].Output = function.ActivationFunc(inputData[i]);
+                }
+                else
+                {
+                    layers[inputLayer][i].Output = inputData[i];
+                }
             }
         }
         
-        public void UpdateDataInNeurons()
+        public void UpdateNeurons()
         {
-            for (int i = 0; i < layers.Length; i++)
+            for (int i = 1; i < layers.Length; i++)
             {
-                if (i == 0) continue;
-
                 for (int j = 0; j < layers[i].Count; j++)
                 {
                     layers[i][j].UpdateData(layers[i - 1]);
@@ -67,7 +73,7 @@ namespace NerualNetwork
                 {
                     for (int j = 0; j < layers[i].Count; j++)
                     {
-                        layers[i][j].GetError(LearnSet[j]);
+                        layers[i][j].Error = LearnSet[j] - layers[i][j].Output;
                     }
                 }
                 else
@@ -84,14 +90,11 @@ namespace NerualNetwork
 
         private void CorrectWeights()
         {
-            for (int i = layers.Length - 1; i >= 0; i--)
+            for (int i = layers.Length - 1; i >= 1; i--)
             {
-                if (i != 0)
+                for (int j = 0; j < layers[i].Count; j++)
                 {
-                    for (int j = 0; j < layers[i].Count; j++)
-                    {
-                        layers[i][j].CorrectWeigts(layers[i - 1], LearnSpeed);
-                    }
+                    layers[i][j].CorrectWeigts(layers[i - 1], LearnSpeed);
                 }
             }
         }

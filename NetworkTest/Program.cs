@@ -35,26 +35,19 @@ namespace NetworkTest
             {
                 for (int j = 0; j < pack.Length; j++)
                 {
-                    // отправка данных
-                    network.SendData(pack[j], true);
+                    network.SetData(pack[j], true);
                     
-                    // обновление нейронов
-                    network.UpdateDataInNeurons();
+                    network.UpdateNeurons();
                     
-                    // обучение нейронов
                     network.Learn(learn[j]);
                 }
             }
-            // отправка данных
-            network.SendData(new double[] { 0.5, 0 }, true);
+            network.SetData(new double[] { 0.5, 0 }, true);
 
-            // обновление данных
-            network.UpdateDataInNeurons();
+            network.UpdateNeurons();
 
-            // принятие данных
             var data = network.GetOutputData();
 
-            // вывод данных
             foreach (var item in data)
             {
                 Console.WriteLine(item);

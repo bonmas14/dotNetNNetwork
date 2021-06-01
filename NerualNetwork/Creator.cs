@@ -1,4 +1,5 @@
 ﻿using System;
+using NerualNetwork.Neurons;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace NerualNetwork
 {
-    public static class Maket
+    internal static class Creator
     {
         public static NeuronType[][] CreateMaket(int[] network)
         {
             NeuronType[][] maket = new NeuronType[network.Length][];
 
-            // create array
             for (int i = 0; i < network.Length; i++)
             {
                 if (i != network.Length - 1)
@@ -21,17 +21,12 @@ namespace NerualNetwork
                     maket[i] = new NeuronType[network[i]];
             }
 
-            // полная иницаиализация макета
             for (int i = 0; i < maket.Length; i++)
             {
-                // первый слой
                 if (i == 0)
                 {
-                    // инициализация нейронов
                     for (int j = 0; j < maket[i].Length; j++)
                     {
-                        // если последний, то это нейрон смещения
-                        // иначе это вход
                         if (j == maket[i].Length - 1)
                         {
                             maket[i][j] = NeuronType.Bias;
@@ -44,10 +39,8 @@ namespace NerualNetwork
                     continue;
                 }
 
-                // последний слой
                 if (i == maket.Length - 1)
                 {
-                    // все нейроны тут выходные
                     for (int j = 0; j < maket[i].Length; j++)
                     {
                         maket[i][j] = NeuronType.Output;
@@ -55,11 +48,8 @@ namespace NerualNetwork
                     continue;
                 }
 
-                // все остальные слои
                 for (int j = 0; j < maket[i].Length; j++)
                 {
-                    // если последний, то это нейрон смещения
-                    // иначе это внутренний нейрон
                     if (j == maket[i].Length - 1)
                     {
                         maket[i][j] = NeuronType.Bias;
@@ -77,26 +67,45 @@ namespace NerualNetwork
 
         public static List<Neuron>[] CreateNetwork(NeuronType[][] maket, IFunction function)
         {
-            // создания сети
             var layers = new List<Neuron>[maket.Length];
 
-            // инициализация сети
             for (int i = 0; i < maket.Length; i++)
             {
-                // создание слоя
                 layers[i] = new List<Neuron>(maket[i].Length);
 
-                // инициализация слоя
                 for (int j = 0; j < maket[i].Length; j++)
                 {
                     if (i == 0)
-                        layers[i].Add(new Neuron(function, maket[i][j], 0));
+                    {
+                        AddNeuron(function, layers[i], 0, maket[i][j]); 
+                    }
                     else
-                        layers[i].Add(new Neuron(function, maket[i][j], layers[i - 1].Count));
+                    {
+                        AddNeuron(function, layers[i], layers[i - 1].Count, maket[i][j]); 
+                    }
                 }
             }
 
             return layers;
+        }
+
+        public static void AddNeuron(IFunction func, List<Neuron> neurons, int prewLayerCount, NeuronType type)
+        {
+            switch (type)
+            {
+                case NeuronType.Input:
+                    neurons.Add(new InputNeuron(func));
+                    break;
+                case NeuronType.Output:
+                    neurons.Add(new HiddenNeuron(func, prewLayerCount));
+                    break;
+                case NeuronType.Hidden:
+                    neurons.Add(new HiddenNeuron(func, prewLayerCount));
+                    break;
+                case NeuronType.Bias:
+                    neurons.Add(new BiasNeuron(func));
+                    break;
+            }
         }
 
     }

@@ -42,8 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IFunction.cs" />
-    <Compile Include="Maket.cs" />
-    <Compile Include="Neuron.cs" />
+    <Compile Include="Creator.cs" />
+    <Compile Include="Neurons\BiasNeuron.cs" />
+    <Compile Include="Neurons\HiddenNeuron.cs" />
+    <Compile Include="Neurons\InputNeuron.cs" />
+    <Compile Include="Neurons\Neuron.cs" />
+    <Compile Include="Neurons\NeuronType.cs" />
     <Compile Include="NNetwork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sigmoid.cs" />
