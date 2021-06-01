@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GANNetwork.cs" />
     <Compile Include="IFunction.cs" />
+    <Compile Include="Maket.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="NNetwork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

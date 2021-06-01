@@ -3,7 +3,7 @@ using System.Collections.Generic;
 // Copyright (c) 2020 BonMAS14
 namespace NerualNetwork
 {
-    enum NeuronType
+    public enum NeuronType
     {
         Input,
         Output,
@@ -11,7 +11,7 @@ namespace NerualNetwork
         Bias
     }
 
-    class Neuron
+    public class Neuron
     {
         // внешние данные
         public double Output { get; private set; }

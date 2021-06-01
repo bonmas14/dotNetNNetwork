@@ -39,7 +39,7 @@ namespace NetworkTest
                     network.SendData(pack[j], true);
                     
                     // обновление нейронов
-                    network.UpdateData();
+                    network.UpdateDataInNeurons();
                     
                     // обучение нейронов
                     network.Learn(learn[j]);
@@ -49,10 +49,10 @@ namespace NetworkTest
             network.SendData(new double[] { 0.5, 0 }, true);
 
             // обновление данных
-            network.UpdateData();
+            network.UpdateDataInNeurons();
 
             // принятие данных
-            var data = network.GetOutput();
+            var data = network.GetOutputData();
 
             // вывод данных
             foreach (var item in data)
