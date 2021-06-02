@@ -11,6 +11,13 @@ namespace NerualNetwork.Neurons
 
         double[] weights;
 
+        static Random random;
+
+        static HiddenNeuron()
+        {
+            random = new Random();
+        }
+
         public HiddenNeuron(IFunction function, int prewLayerNeruonCount) : base(function)
         {
             if (prewLayerNeruonCount == 0)
@@ -19,8 +26,6 @@ namespace NerualNetwork.Neurons
             }
 
             weights = new double[prewLayerNeruonCount];
-
-            Random random = new Random();
 
             for (int i = 0; i < weights.Length; i++)
             {
