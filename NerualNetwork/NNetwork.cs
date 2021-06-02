@@ -1,4 +1,5 @@
 ﻿using NerualNetwork.Neurons;
+using System;
 using System.Collections.Generic;
 
 // Copyright (c) 2020 BonMAS14
@@ -10,6 +11,8 @@ namespace NerualNetwork
 
         private List<Neuron>[] layers;
 
+        private int[] networkMaket;
+
         /// <summary>
         /// Констуктор сети
         /// </summary>
@@ -17,9 +20,35 @@ namespace NerualNetwork
         /// <param name="network"> Макет сети, количество слоёв это длина массива и тд</param>
         public NNetwork(IFunction function, int[] network)
         {
-            var maket = Creator.CreateMaket(network);
+            networkMaket = (int[])network.Clone();
 
-            layers = Creator.CreateNetwork(maket, function);
+            Creator creator = new Creator();
+
+            var maket = creator.CreateMaket(network);
+
+            layers = creator.CreateNetwork(maket, function);
+        }
+
+        public NNetwork(IFunction function, string path)
+        {
+
+        }
+
+        public double[] GetWeightsFromNeuron(int layer, int index)
+        {
+            if (layers[layer][index].GetType() == typeof(HiddenNeuron))
+            {
+                var neuron = (HiddenNeuron)layers[layer][index];
+            }
+            else
+            {
+                return new double[0];
+            }
+        }
+
+        public int[] GetMaket()
+        {
+            return (int[])networkMaket.Clone();
         }
 
         public void SetData(double[] inputData, bool sendToActivationFunc)

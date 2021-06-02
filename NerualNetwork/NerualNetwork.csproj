@@ -49,6 +49,8 @@
     <Compile Include="Neurons\Neuron.cs" />
     <Compile Include="Neurons\NeuronType.cs" />
     <Compile Include="NNetwork.cs" />
+    <Compile Include="NNetworkLoader.cs" />
+    <Compile Include="NNetworkSaver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sigmoid.cs" />
   </ItemGroup>

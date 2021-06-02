@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 // Copyright (c) 2021 BonMAS14
 namespace NerualNetwork
 {
-    internal static class Creator
+    internal class Creator
     {
-        public static NeuronType[][] CreateMaket(int[] network)
+        
+        List<Neuron> layer;
+        IFunction function;
+        
+        public NeuronType[][] CreateMaket(int[] network)
         {
             NeuronType[][] maket = new NeuronType[network.Length][];
 
@@ -65,8 +69,10 @@ namespace NerualNetwork
             return maket;
         }
 
-        public static List<Neuron>[] CreateNetwork(NeuronType[][] maket, IFunction function)
+        public List<Neuron>[] CreateNetwork(NeuronType[][] maket, IFunction function)
         {
+            this.function = function;
+            
             var layers = new List<Neuron>[maket.Length];
 
             for (int i = 0; i < maket.Length; i++)
@@ -75,13 +81,15 @@ namespace NerualNetwork
 
                 for (int j = 0; j < maket[i].Length; j++)
                 {
+                    layer = layers[i];
+
                     if (i == 0)
                     {
-                        AddNeuron(function, layers[i], 0, maket[i][j]); 
+                        AddNeuron(0, maket[i][j]); 
                     }
                     else
                     {
-                        AddNeuron(function, layers[i], layers[i - 1].Count, maket[i][j]); 
+                        AddNeuron(layers[i - 1].Count, maket[i][j]); 
                     }
                 }
             }
@@ -89,21 +97,29 @@ namespace NerualNetwork
             return layers;
         }
 
-        public static void AddNeuron(IFunction func, List<Neuron> neurons, int prewLayerCount, NeuronType type)
+        public List<Neuron>[] CreateNetwork(string path)
+        {
+            NNetworkLoader loader = new NNetworkLoader(path);
+
+            var maket = CreateMaket(loader.GetMaketValues());
+
+        }
+
+        public void AddNeuron(int prewLayerCount, NeuronType type)
         {
             switch (type)
             {
                 case NeuronType.Input:
-                    neurons.Add(new InputNeuron(func));
+                    layer.Add(new InputNeuron(function));
                     break;
                 case NeuronType.Output:
-                    neurons.Add(new HiddenNeuron(func, prewLayerCount));
+                    layer.Add(new HiddenNeuron(function, prewLayerCount));
                     break;
                 case NeuronType.Hidden:
-                    neurons.Add(new HiddenNeuron(func, prewLayerCount));
+                    layer.Add(new HiddenNeuron(function, prewLayerCount));
                     break;
                 case NeuronType.Bias:
-                    neurons.Add(new BiasNeuron(func));
+                    layer.Add(new BiasNeuron(function));
                     break;
             }
         }
