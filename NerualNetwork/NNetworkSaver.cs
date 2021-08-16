@@ -11,34 +11,29 @@ namespace NerualNetwork
     {
         public const string header = "NETw";
 
-        NNetwork network;
+        NNetwork _network;
 
-        BinaryWriter saver;
+        BinaryWriter _saver;
 
         public NNetworkSaver(NNetwork network)
         {
-            this.network = network;
+            this._network = network;
         }
 
         public void SaveNetwork(string path)
         {
             if (!File.Exists(path))
             {
-                File.Create(path);
+                File.Create(path).Close();
             }
 
-            if (saver != null)
-            {
-                saver.Close();
-            }
-            
             FileStream fsStream = new FileStream(path, FileMode.Create);
-            saver = new BinaryWriter(fsStream, Encoding.UTF8);
+            _saver = new BinaryWriter(fsStream, Encoding.UTF8);
 
-            SaveMaket(network.GetMaket());
+            SaveMaket(_network.GetMaket());
             SaveData();
 
-            saver.Close();
+            _saver.Close();
             fsStream.Close();
         }
 
@@ -46,27 +41,27 @@ namespace NerualNetwork
         {
             WriteHeader(header);
 
-            saver.Write(maket.Length);
+            _saver.Write(maket.Length);
 
             foreach (int layer in maket)
             {
-                saver.Write(layer);
+                _saver.Write(layer);
             }
         }
 
         private void SaveData()
         {
-            var maket = network.GetMaket();
+            var maket = _network.GetMaket();
 
             for (int layer = 1; layer < maket.Length; layer++)
             {
                 for (int neuronInd = 0; neuronInd < maket[layer]; neuronInd++)
                 {
-                    var weights = network.GetWeightsFromNeuron(layer, neuronInd);
+                    var weights = _network.GetWeightsFromNeuron(layer, neuronInd);
 
                     for (int i = 0; i < weights.Length; i++)
                     {
-                        saver.Write(weights[i]);
+                        _saver.Write(weights[i]);
                     }
                 }
             }
@@ -77,7 +72,7 @@ namespace NerualNetwork
         {
             var buffer = Encoding.UTF8.GetBytes(header);
 
-            saver.Write(buffer);
+            _saver.Write(buffer);
         }
     }
 }

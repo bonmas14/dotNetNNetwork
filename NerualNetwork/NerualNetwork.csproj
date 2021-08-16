@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="IFunction.cs" />
     <Compile Include="Creator.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Neurons\BiasNeuron.cs" />
     <Compile Include="Neurons\HiddenNeuron.cs" />
     <Compile Include="Neurons\InputNeuron.cs" />

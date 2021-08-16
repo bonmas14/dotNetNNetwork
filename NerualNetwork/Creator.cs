@@ -9,9 +9,9 @@ namespace NerualNetwork
 {
     internal class Creator
     {
+        List<Neuron> _layer;
         
-        List<Neuron> layer;
-        IFunction function;
+        IFunction _function;
         
         public NeuronType[][] CreateMaket(int[] network)
         {
@@ -71,7 +71,7 @@ namespace NerualNetwork
 
         public List<Neuron>[] CreateNetwork(NeuronType[][] maket, IFunction function)
         {
-            this.function = function;
+            this._function = function;
             
             var layers = new List<Neuron>[maket.Length];
 
@@ -81,7 +81,7 @@ namespace NerualNetwork
 
                 for (int j = 0; j < maket[i].Length; j++)
                 {
-                    layer = layers[i];
+                    _layer = layers[i];
 
                     if (i == 0)
                     {
@@ -102,16 +102,16 @@ namespace NerualNetwork
             switch (type)
             {
                 case NeuronType.Input:
-                    layer.Add(new InputNeuron(function));
+                    _layer.Add(new InputNeuron(_function));
                     break;
                 case NeuronType.Output:
-                    layer.Add(new HiddenNeuron(function, prewLayerCount));
+                    _layer.Add(new HiddenNeuron(_function, prewLayerCount));
                     break;
                 case NeuronType.Hidden:
-                    layer.Add(new HiddenNeuron(function, prewLayerCount));
+                    _layer.Add(new HiddenNeuron(_function, prewLayerCount));
                     break;
                 case NeuronType.Bias:
-                    layer.Add(new BiasNeuron(function));
+                    _layer.Add(new BiasNeuron(_function));
                     break;
             }
         }

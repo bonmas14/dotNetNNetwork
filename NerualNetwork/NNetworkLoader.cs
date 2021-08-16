@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NerualNetwork.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,18 +10,20 @@ namespace NerualNetwork
 {
     public sealed class NNetworkLoader
     {
-        string path;
+        string _path;
 
-        private BinaryReader loader;
+        private BinaryReader _loader;
+        private ILogger _logger;
 
-        public NNetworkLoader(string path)
+        public NNetworkLoader(string path, ILogger logger)
         {
-            this.path = path;
+            _path = path;
+            _logger = logger;
         }
 
         public NNetwork LoadNNetwork(IFunction function)
         {
-            loader = new BinaryReader(new StreamReader(path).BaseStream);
+            _loader = new BinaryReader(new StreamReader(_path).BaseStream);
             
             NNetwork network = null;
 
@@ -34,12 +37,11 @@ namespace NerualNetwork
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.Log(e.Message);
             }
             finally
             {
-
-                loader.Close();
+                _loader.Close();
             }
 
             return network;
@@ -47,7 +49,7 @@ namespace NerualNetwork
 
         private int[] GetMaket()
         {
-            var byteHeader = loader.ReadBytes(4);
+            var byteHeader = _loader.ReadBytes(4);
 
             string header = Encoding.UTF8.GetString(byteHeader);
 
@@ -56,13 +58,13 @@ namespace NerualNetwork
                 throw new ArgumentException("заголовок не совпал");
             }
 
-            int length = loader.ReadInt32();
+            int length = _loader.ReadInt32();
 
             int[] maket = new int[length];
 
             for (int i = 0; i < length; i++)
             {
-                maket[i] = loader.ReadInt32();
+                maket[i] = _loader.ReadInt32();
             }
 
             return maket;
@@ -78,7 +80,7 @@ namespace NerualNetwork
 
                     for (int weightInd = 0; weightInd < maket[layer - 1] + 1; weightInd++)
                     {
-                        weights[weightInd] = loader.ReadDouble();
+                        weights[weightInd] = _loader.ReadDouble();
                     }
 
                     network.SetNeuronWeights(weights, layer, index);

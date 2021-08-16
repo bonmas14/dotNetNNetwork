@@ -9,9 +9,9 @@ namespace NerualNetwork
     {
         public double LearnSpeed { get; set; } = 0.1;
 
-        private List<Neuron>[] layers;
+        private List<Neuron>[] _layers;
 
-        private int[] networkMaket;
+        private int[] _networkMaket;
 
         /// <summary>
         /// Констуктор сети
@@ -20,13 +20,13 @@ namespace NerualNetwork
         /// <param name="network"> Макет сети, количество слоёв это длина массива и тд</param>
         public NNetwork(IFunction function, int[] network)
         {
-            networkMaket = (int[])network.Clone();
+            _networkMaket = (int[])network.Clone();
 
             Creator creator = new Creator();
 
             var maket = creator.CreateMaket(network);
 
-            layers = creator.CreateNetwork(maket, function);
+            _layers = creator.CreateNetwork(maket, function);
         }
 
         public NNetwork(IFunction function, string path)
@@ -36,9 +36,9 @@ namespace NerualNetwork
 
         public double[] GetWeightsFromNeuron(int layer, int index)
         {
-            if (layers[layer][index].GetType() == typeof(HiddenNeuron))
+            if (_layers[layer][index].GetType() == typeof(HiddenNeuron))
             {
-                var neuron = (HiddenNeuron)layers[layer][index];
+                var neuron = (HiddenNeuron)_layers[layer][index];
 
                 return neuron.GetWeights();
             }
@@ -50,11 +50,11 @@ namespace NerualNetwork
 
         public bool SetNeuronWeights(double[] weight, int layer, int index)
         {
-            if (layers[layer][index].GetType() == typeof(HiddenNeuron))
+            if (_layers[layer][index].GetType() == typeof(HiddenNeuron))
             {
                 for (int i = 0; i < weight.Length; i++)
                 {
-                    var neuron = (HiddenNeuron)layers[layer][index];
+                    var neuron = (HiddenNeuron)_layers[layer][index];
 
                     neuron.SetWeight(weight[i], i);
                 }
@@ -69,48 +69,48 @@ namespace NerualNetwork
 
         public int[] GetMaket()
         {
-            return (int[])networkMaket.Clone();
+            return (int[])_networkMaket.Clone();
         }
 
         public void SetData(double[] inputData, bool sendToActivationFunc)
         {
             int inputLayer = 0;
 
-            for (int i = 0; i < layers[inputLayer].Count - 1; i++)
+            for (int i = 0; i < _layers[inputLayer].Count - 1; i++)
             {
                 if (sendToActivationFunc)
                 {
-                    var function = layers[inputLayer][i].function;
+                    var function = _layers[inputLayer][i].function;
 
-                    layers[inputLayer][i].Output = function.ActivationFunc(inputData[i]);
+                    _layers[inputLayer][i].Output = function.ActivationFunc(inputData[i]);
                 }
                 else
                 {
-                    layers[inputLayer][i].Output = inputData[i];
+                    _layers[inputLayer][i].Output = inputData[i];
                 }
             }
         }
         
         public void UpdateNeurons()
         {
-            for (int i = 1; i < layers.Length; i++)
+            for (int i = 1; i < _layers.Length; i++)
             {
-                for (int j = 0; j < layers[i].Count; j++)
+                for (int j = 0; j < _layers[i].Count; j++)
                 {
-                    layers[i][j].UpdateData(layers[i - 1]);
+                    _layers[i][j].UpdateData(_layers[i - 1]);
                 }
             }
         }
 
         public double[] GetOutputData()
         {
-            int lastLayer = layers.Length - 1;
+            int lastLayer = _layers.Length - 1;
 
-            double[] output = new double[layers[lastLayer].Count];
+            double[] output = new double[_layers[lastLayer].Count];
 
-            for (int i = 0; i < layers[lastLayer].Count; i++)
+            for (int i = 0; i < _layers[lastLayer].Count; i++)
             {
-                output[i] = layers[lastLayer][i].Output;
+                output[i] = _layers[lastLayer][i].Output;
             }
 
             return output;
@@ -118,20 +118,20 @@ namespace NerualNetwork
 
         public void Learn(double[] LearnSet)
         {
-            for (int i = layers.Length - 1; i >= 0; i--)
+            for (int i = _layers.Length - 1; i >= 0; i--)
             {
-                if (i == layers.Length - 1)
+                if (i == _layers.Length - 1)
                 {
-                    for (int j = 0; j < layers[i].Count; j++)
+                    for (int j = 0; j < _layers[i].Count; j++)
                     {
-                        layers[i][j].Error = LearnSet[j] - layers[i][j].Output;
+                        _layers[i][j].Error = LearnSet[j] - _layers[i][j].Output;
                     }
                 }
                 else
                 {
-                    for (int j = 0; j < layers[i].Count; j++)
+                    for (int j = 0; j < _layers[i].Count; j++)
                     {
-                        layers[i][j].GetError(j, layers[i + 1]);
+                        _layers[i][j].GetError(j, _layers[i + 1]);
                     }
                 }
             }
@@ -141,11 +141,11 @@ namespace NerualNetwork
 
         private void CorrectWeights()
         {
-            for (int i = layers.Length - 1; i >= 1; i--)
+            for (int i = _layers.Length - 1; i >= 1; i--)
             {
-                for (int j = 0; j < layers[i].Count; j++)
+                for (int j = 0; j < _layers[i].Count; j++)
                 {
-                    layers[i][j].CorrectWeigts(layers[i - 1], LearnSpeed);
+                    _layers[i][j].CorrectWeigts(_layers[i - 1], LearnSpeed);
                 }
             }
         }
