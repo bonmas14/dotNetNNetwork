@@ -81,5 +81,10 @@ namespace NerualNetwork.Neurons
         {
             return (double[])weights.Clone();
         }
+
+        public void SetWeight(double weight, int index)
+        {
+            weights[index] = weight;
+        }
     }
 }

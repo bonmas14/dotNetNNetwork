@@ -39,12 +39,33 @@ namespace NerualNetwork
             if (layers[layer][index].GetType() == typeof(HiddenNeuron))
             {
                 var neuron = (HiddenNeuron)layers[layer][index];
+
+                return neuron.GetWeights();
             }
             else
             {
                 return new double[0];
             }
         }
+
+        public bool SetNeuronWeights(double[] weight, int layer, int index)
+        {
+            if (layers[layer][index].GetType() == typeof(HiddenNeuron))
+            {
+                for (int i = 0; i < weight.Length; i++)
+                {
+                    var neuron = (HiddenNeuron)layers[layer][index];
+
+                    neuron.SetWeight(weight[i], i);
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
 
         public int[] GetMaket()
         {

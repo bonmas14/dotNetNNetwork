@@ -9,9 +9,11 @@ namespace NerualNetwork
 {
     public sealed class NNetworkSaver
     {
+        public const string header = "NETw";
+
         NNetwork network;
 
-        BinaryWriter binaryWriter;
+        BinaryWriter saver;
 
         public NNetworkSaver(NNetwork network)
         {
@@ -20,38 +22,62 @@ namespace NerualNetwork
 
         public void SaveNetwork(string path)
         {
-            binaryWriter = new BinaryWriter(new StreamWriter(path).BaseStream);
+            if (!File.Exists(path))
+            {
+                File.Create(path);
+            }
+
+            if (saver != null)
+            {
+                saver.Close();
+            }
+            
+            FileStream fsStream = new FileStream(path, FileMode.Create);
+            saver = new BinaryWriter(fsStream, Encoding.UTF8);
 
             SaveMaket(network.GetMaket());
+            SaveData();
 
-
-            binaryWriter.Close();
+            saver.Close();
+            fsStream.Close();
         }
 
         private void SaveMaket(int[] maket)
         {
-            WriteHeader("MAKt");
+            WriteHeader(header);
 
-            binaryWriter.Write(maket.Length * 4);
+            saver.Write(maket.Length);
 
             foreach (int layer in maket)
             {
-                binaryWriter.Write(layer);
+                saver.Write(layer);
             }
         }
 
         private void SaveData()
         {
-            WriteHeader("DATa");
+            var maket = network.GetMaket();
 
-            //binaryWriter.Write();
+            for (int layer = 1; layer < maket.Length; layer++)
+            {
+                for (int neuronInd = 0; neuronInd < maket[layer]; neuronInd++)
+                {
+                    var weights = network.GetWeightsFromNeuron(layer, neuronInd);
+
+                    for (int i = 0; i < weights.Length; i++)
+                    {
+                        saver.Write(weights[i]);
+                    }
+                }
+            }
+
         }
 
         private void WriteHeader(string header)
         {
             var buffer = Encoding.UTF8.GetBytes(header);
 
-            binaryWriter.Write(buffer);
+            saver.Write(buffer);
         }
     }
 }

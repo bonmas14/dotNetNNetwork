@@ -54,6 +54,31 @@ namespace NetworkTest
             }
 
             Console.ReadLine();
+
+            Console.WriteLine("Save Load Test");
+
+            NNetworkSaver saver = new NNetworkSaver(network);
+
+            saver.SaveNetwork("network.nwk");
+
+            NNetworkLoader loader = new NNetworkLoader("network.nwk");
+
+            network = null;
+
+            network = loader.LoadNNetwork(sigmoid);
+
+            network.SetData(new double[] { 0.5, 0.0 }, true);
+
+            network.UpdateNeurons();
+
+            data = network.GetOutputData();
+
+            foreach (var item in data)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.ReadLine();
         }
     }
 }

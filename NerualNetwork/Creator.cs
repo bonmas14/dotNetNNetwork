@@ -97,14 +97,6 @@ namespace NerualNetwork
             return layers;
         }
 
-        public List<Neuron>[] CreateNetwork(string path)
-        {
-            NNetworkLoader loader = new NNetworkLoader(path);
-
-            var maket = CreateMaket(loader.GetMaketValues());
-
-        }
-
         public void AddNeuron(int prewLayerCount, NeuronType type)
         {
             switch (type)
