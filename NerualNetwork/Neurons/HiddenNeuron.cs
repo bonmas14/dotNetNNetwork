@@ -33,6 +33,11 @@ namespace NerualNetwork.Neurons
             }
         }
 
+        public HiddenNeuron(IFunction function, double[] weights) : base(function)
+        {
+            this.weights = weights;
+        }
+
         public override void UpdateData(List<Neuron> prewNeurons)
         {
             double data = 0;
@@ -70,6 +75,16 @@ namespace NerualNetwork.Neurons
 
                 Error += neuron.weights[neuronIndex] * nextNeurons[i].Error;
             }
+        }
+
+        public double[] GetWeights()
+        {
+            return (double[])weights.Clone();
+        }
+
+        public void SetWeight(double weight, int index)
+        {
+            weights[index] = weight;
         }
     }
 }
