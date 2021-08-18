@@ -29,11 +29,6 @@ namespace NerualNetwork
             _layers = creator.CreateNetwork(maket, function);
         }
 
-        public NNetwork(IFunction function, string path)
-        {
-
-        }
-
         public double[] GetWeightsFromNeuron(int layer, int index)
         {
             if (_layers[layer][index].GetType() == typeof(HiddenNeuron))
