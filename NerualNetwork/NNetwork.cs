@@ -118,25 +118,27 @@ namespace NerualNetwork
 
         public void Learn(double[] LearnSet)
         {
-            for (int i = _layers.Length - 1; i >= 0; i--)
+            GetNeuronsError(LearnSet);
+
+            CorrectWeights();
+        }
+
+        private void GetNeuronsError(double[] LearnSet)
+        {
+            for (int i = _layers.Length - 2; i >= 0; i--)
             {
-                if (i == _layers.Length - 1)
+                for (int j = 0; j < _layers[i].Count; j++)
                 {
-                    for (int j = 0; j < _layers[i].Count; j++)
-                    {
-                        _layers[i][j].Error = LearnSet[j] - _layers[i][j].Output;
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < _layers[i].Count; j++)
-                    {
-                        _layers[i][j].GetError(j, _layers[i + 1]);
-                    }
+                    _layers[i][j].GetError(j, _layers[i + 1]);
                 }
             }
 
-            CorrectWeights();
+            int lastLayer = _layers.Length - 1;
+
+            for (int j = 0; j < _layers[lastLayer].Count; j++)
+            {
+                _layers[lastLayer][j].Error = LearnSet[j] - _layers[lastLayer][j].Output;
+            }
         }
 
         private void CorrectWeights()
