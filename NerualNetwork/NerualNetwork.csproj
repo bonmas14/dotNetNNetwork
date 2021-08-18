@@ -53,11 +53,6 @@
     <Compile Include="NNetwork.cs" />
     <Compile Include="NNetworkLoader.cs" />
     <Compile Include="NNetworkSaver.cs" />
-    <Compile Include="Parallel\GetWeightJob.cs" />
-    <Compile Include="Parallel\GetWeightJobCoordinator.cs" />
-    <Compile Include="Parallel\JobCoordinator.cs" />
-    <Compile Include="Parallel\UpdateJob.cs" />
-    <Compile Include="Parallel\UpdateJobCoordinator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sigmoid.cs" />
   </ItemGroup>
