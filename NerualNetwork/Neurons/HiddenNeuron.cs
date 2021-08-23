@@ -47,6 +47,8 @@ namespace NerualNetwork.Neurons
                 data += prewNeurons[i].Output * weights[i];
             }
 
+            _lastInput = data;
+
             Output = function.ActivationFunc(data);
 
             base.UpdateData(prewNeurons);
@@ -54,7 +56,7 @@ namespace NerualNetwork.Neurons
 
         public override void CorrectWeigts(List<Neuron> prewNeurons, double learnSpeed)
         {
-            double deltaError = Error * function.DeltaFunc(Output);
+            double deltaError = Error * function.DeltaFunc(_lastInput);
 
             for (int i = 0; i < prewNeurons.Count; i++)
             {

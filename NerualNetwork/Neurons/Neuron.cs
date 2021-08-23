@@ -11,7 +11,9 @@ namespace NerualNetwork.Neurons
         public double Error;
 
         public IFunction function;
-        
+
+        protected double _lastInput = 0;
+
         public Neuron(IFunction function)
         {
             this.function = function;

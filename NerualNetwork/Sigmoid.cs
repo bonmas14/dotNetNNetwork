@@ -6,6 +6,6 @@ namespace NerualNetwork
     {
         public double ActivationFunc(double x) => 1.0f / (1.0f + Math.Pow(Math.E, -x));
 
-        public double DeltaFunc(double data)   => data * (1.0f - data);
+        public double DeltaFunc(double x)   => ActivationFunc(x) * (1.0f - ActivationFunc(x));
     }
 }
