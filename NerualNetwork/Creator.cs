@@ -1,10 +1,8 @@
-﻿using System;
-using NerualNetwork.Neurons;
+﻿using NerualNetwork.Neurons;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 // Copyright (c) 2021 BonMAS14
+
 namespace NerualNetwork
 {
     internal class Creator
@@ -71,7 +69,7 @@ namespace NerualNetwork
 
         public List<Neuron>[] CreateNetwork(NeuronType[][] maket, IFunction function)
         {
-            this._function = function;
+            _function = function;
             
             var layers = new List<Neuron>[maket.Length];
 

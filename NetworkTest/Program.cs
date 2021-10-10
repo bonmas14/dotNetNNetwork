@@ -13,27 +13,9 @@ namespace NetworkTest
             // создание экземпляра функции активации
             Sigmoid sigmoid = new Sigmoid();
 
-            // создание набора данных
-            double[][] pack = new double[5][];
-
-            pack[0] = new double[] { 0.5, 0.4 };
-            pack[1] = new double[] { 0, 0.7 };
-            pack[2] = new double[] { 0, 0 };
-            pack[3] = new double[] { 0.2, 0 };
-            pack[4] = new double[] { 1, 0.4 };
-
-            // создание набора для обучения
-            double[][] learn = new double[5][];
-
-            learn[0] = new double[] { 1, 0 };
-            learn[1] = new double[] { 0, 1 };
-            learn[2] = new double[] { 0, 0 };
-            learn[3] = new double[] { 0, 0 };
-            learn[4] = new double[] { 1, 0 };
-
             network = new NNetwork(sigmoid, new int[] { 2, 4, 2 });
             
-            TrainNetwork(pack, learn);
+            TrainNetwork();
 
             TestNetwork();
 
@@ -54,9 +36,27 @@ namespace NetworkTest
             Console.ReadLine();
         }
 
-        private static void TrainNetwork(double[][] pack, double[][] learn)
+        private static void TrainNetwork()
         {
-            for (int i = 0; i < 4000; i++)
+            // создание набора данных
+            double[][] pack = new double[5][];
+
+            pack[0] = new double[] { 0.5, 0.4 };
+            pack[1] = new double[] { 0, 0.7 };
+            pack[2] = new double[] { 0, 0 };
+            pack[3] = new double[] { 0.2, 0 };
+            pack[4] = new double[] { 1, 0.4 };
+
+            // создание набора для обучения
+            double[][] learn = new double[5][];
+
+            learn[0] = new double[] { 1, 0 };
+            learn[1] = new double[] { 0, 1 };
+            learn[2] = new double[] { 0, 0 };
+            learn[3] = new double[] { 0, 0 };
+            learn[4] = new double[] { 1, 0 };
+
+            for (int i = 0; i < 40000; i++)
             {
                 for (int j = 0; j < pack.Length; j++)
                 {
@@ -81,7 +81,6 @@ namespace NetworkTest
             {
                 Console.WriteLine(item);
             }
-
         }
     }
 }

@@ -13,11 +13,6 @@ namespace NerualNetwork
 
         private int[] _networkMaket;
 
-        /// <summary>
-        /// Констуктор сети
-        /// </summary>
-        /// <param name="function"> Используемая функция активации, стандартная - Sigmoid</param>
-        /// <param name="network"> Макет сети, количество слоёв это длина массива и тд</param>
         public NNetwork(IFunction function, int[] network)
         {
             _networkMaket = (int[])network.Clone();

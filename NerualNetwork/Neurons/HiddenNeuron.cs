@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 // Copyright (c) 2021 BonMAS14
+
 namespace NerualNetwork.Neurons
 {
     public class HiddenNeuron : Neuron
     {
+        double[] _weights;
 
-        double[] weights;
-
-        static Random random;
+        static Random _random;
 
         static HiddenNeuron()
         {
-            random = new Random();
+            _random = new Random();
         }
 
         public HiddenNeuron(IFunction function, int prewLayerNeruonCount) : base(function)
@@ -25,26 +23,26 @@ namespace NerualNetwork.Neurons
                 throw new ArgumentException("prewLayerNeruonCount равно нулю!");
             }
 
-            weights = new double[prewLayerNeruonCount];
+            _weights = new double[prewLayerNeruonCount];
 
-            for (int i = 0; i < weights.Length; i++)
+            for (int i = 0; i < _weights.Length; i++)
             {
-                weights[i] = random.NextDouble() - 0.5;
+                _weights[i] = _random.NextDouble() - 0.5;
             }
         }
 
         public HiddenNeuron(IFunction function, double[] weights) : base(function)
         {
-            this.weights = weights;
+            this._weights = weights;
         }
 
         public override void UpdateData(List<Neuron> prewNeurons)
         {
             double data = 0;
 
-            for (int i = 0; i < weights.Length; i++)
+            for (int i = 0; i < _weights.Length; i++)
             {
-                data += prewNeurons[i].Output * weights[i];
+                data += prewNeurons[i].Output * _weights[i];
             }
 
             _lastInput = data;
@@ -61,7 +59,7 @@ namespace NerualNetwork.Neurons
             for (int i = 0; i < prewNeurons.Count; i++)
             {
                 double correct = learnSpeed * deltaError * prewNeurons[i].Output;
-                weights[i] += correct;
+                _weights[i] += correct;
             }
 
             base.CorrectWeigts(prewNeurons, learnSpeed);
@@ -75,18 +73,18 @@ namespace NerualNetwork.Neurons
             {
                 HiddenNeuron neuron = (HiddenNeuron)nextNeurons[i];
 
-                Error += neuron.weights[neuronIndex] * nextNeurons[i].Error;
+                Error += neuron._weights[neuronIndex] * nextNeurons[i].Error;
             }
         }
 
         public double[] GetWeights()
         {
-            return (double[])weights.Clone();
+            return (double[])_weights.Clone();
         }
 
         public void SetWeight(double weight, int index)
         {
-            weights[index] = weight;
+            _weights[index] = weight;
         }
     }
 }
