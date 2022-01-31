@@ -115,19 +115,19 @@ namespace NerualNetwork
 
         private void GetNeuronsError(double[] LearnSet)
         {
+            int lastLayer = _layers.Length - 1;
+
+            for (int j = 0; j < _layers[lastLayer].Count; j++)
+            {
+                _layers[lastLayer][j].Error = LearnSet[j] - _layers[lastLayer][j].Output;
+            }
+
             for (int i = _layers.Length - 2; i >= 0; i--)
             {
                 for (int j = 0; j < _layers[i].Count; j++)
                 {
                     _layers[i][j].GetError(j, _layers[i + 1]);
                 }
-            }
-
-            int lastLayer = _layers.Length - 1;
-
-            for (int j = 0; j < _layers[lastLayer].Count; j++)
-            {
-                _layers[lastLayer][j].Error = LearnSet[j] - _layers[lastLayer][j].Output;
             }
         }
 
