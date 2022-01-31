@@ -85,7 +85,7 @@ namespace NetworkTest
 
         static void TestNetwork()
         {
-            network.SetData(new double[] { 0.5, 0.0 }, true);
+            network.SetData(new double[] { 1, 0 }, true);
 
             network.UpdateNeurons();
 
