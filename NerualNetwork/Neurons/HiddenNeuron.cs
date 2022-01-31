@@ -65,7 +65,7 @@ namespace NerualNetwork.Neurons
             base.CorrectWeigts(prewNeurons, learnSpeed);
         }
 
-        public override void GetError(int neuronIndex, List<Neuron> nextNeurons)
+        public override void UpdateNeuronError(int neuronIndex, List<Neuron> nextNeurons)
         {
             Error = 0;
 
@@ -73,7 +73,7 @@ namespace NerualNetwork.Neurons
             {
                 HiddenNeuron neuron = (HiddenNeuron)nextNeurons[i];
 
-                Error += neuron._weights[neuronIndex] * nextNeurons[i].Error;
+                Error += neuron._weights[neuronIndex] * neuron.Error;
             }
         }
 

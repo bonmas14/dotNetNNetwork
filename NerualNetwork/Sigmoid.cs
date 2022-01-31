@@ -4,8 +4,8 @@ namespace NerualNetwork
 {
     public class Sigmoid : IFunction
     {
-        public double ActivationFunc(double x) => 1.0f / (1.0f + Math.Pow(Math.E, -x));
+        public double ActivationFunc(double x) => 1.0 / (1.0 + Math.Pow(Math.E, -x));
 
-        public double DeltaFunc(double x)   => ActivationFunc(x) * (1.0f - ActivationFunc(x));
+        public double DeltaFunc(double x)   => ActivationFunc(x) * (1.0 - ActivationFunc(x));
     }
 }

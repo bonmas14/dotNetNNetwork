@@ -48,12 +48,13 @@ namespace NerualNetwork
 
                     neuron.SetWeight(weight[i], i);
                 }
+
+                return true;
             }
             else
             {
                 return false;
             }
-            return true;
         }
 
 
@@ -108,12 +109,25 @@ namespace NerualNetwork
 
         public void Learn(double[] LearnSet)
         {
-            GetNeuronsError(LearnSet);
+            UpdateNeuronsError(LearnSet);
 
             CorrectWeights();
         }
 
-        private void GetNeuronsError(double[] LearnSet)
+        public double GetNetworkError()
+        {
+            double error = 0;
+            int lastLayer = _layers.Length - 1;
+
+            for (int neuron = 0; neuron < _layers[lastLayer].Count; neuron++)
+            {
+                error += Math.Pow(_layers[lastLayer][neuron].Error, 2);
+            }
+
+            return error;
+        }
+
+        private void UpdateNeuronsError(double[] LearnSet)
         {
             int lastLayer = _layers.Length - 1;
 
@@ -126,7 +140,7 @@ namespace NerualNetwork
             {
                 for (int j = 0; j < _layers[i].Count; j++)
                 {
-                    _layers[i][j].GetError(j, _layers[i + 1]);
+                    _layers[i][j].UpdateNeuronError(j, _layers[i + 1]);
                 }
             }
         }

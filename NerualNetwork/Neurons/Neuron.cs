@@ -27,7 +27,7 @@ namespace NerualNetwork.Neurons
         {
         }
 
-        public virtual void GetError(int neuronIndex, List<Neuron> nextNeurons)
+        public virtual void UpdateNeuronError(int neuronIndex, List<Neuron> nextNeurons)
         {
         }
 

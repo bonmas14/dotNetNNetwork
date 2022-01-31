@@ -27,20 +27,26 @@ namespace NerualNetwork
                 File.Create(path).Close();
             }
 
-            FileStream fsStream = new FileStream(path, FileMode.Create);
-            _saver = new BinaryWriter(fsStream, Encoding.UTF8);
+            FileStream save = new FileStream(path, FileMode.Create);
+            _saver = new BinaryWriter(save, Encoding.UTF8);
 
+            WriteHeader(header);
             SaveMaket(_network.GetMaket());
             SaveData();
 
             _saver.Close();
-            fsStream.Close();
+            save.Close();
+        }
+
+        private void WriteHeader(string header)
+        {
+            var buffer = Encoding.UTF8.GetBytes(header);
+
+            _saver.Write(buffer);
         }
 
         private void SaveMaket(int[] maket)
         {
-            WriteHeader(header);
-
             _saver.Write(maket.Length);
 
             foreach (int layer in maket)
@@ -66,13 +72,6 @@ namespace NerualNetwork
                 }
             }
 
-        }
-
-        private void WriteHeader(string header)
-        {
-            var buffer = Encoding.UTF8.GetBytes(header);
-
-            _saver.Write(buffer);
         }
     }
 }
