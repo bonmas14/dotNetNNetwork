@@ -1,5 +1,7 @@
 
 # dotNetNNetwork
+
+### Библиотека устарела
 [![licence badge]][licence]
 [![stars badge]][stars]
 [![forks badge]][forks]
